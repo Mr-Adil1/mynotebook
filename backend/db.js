@@ -3,6 +3,7 @@ const mongoos = require("mongoose");
 const uri = "mongodb+srv://mynotebook:p9XuViM4Ko1TFTl7@cluster0.zexqyvn.mongodb.net/mynotebook";
 
 const connectDB = () => {
+  /* Connecting to the database. */
   mongoos
     .connect(uri)
     .then((db) => {
