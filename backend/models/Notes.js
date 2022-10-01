@@ -19,5 +19,4 @@ const NotesSchema = new Schema({
   },
 });
 const Notes = mongoose.model("notes", NotesSchema);
-Notes.createIndexes();
 module.exports = Notes
