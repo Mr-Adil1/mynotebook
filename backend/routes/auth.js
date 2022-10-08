@@ -7,8 +7,9 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 /* Used to generate a token for the user. */
 const jwt = require("jsonwebtoken");
+var fetchuser = require("../middleware/fetchuser");
 /* A secret key that is used to generate the token. */
-const JWT_SECRET = 'adilisagood$$boy'
+const JWT_SECRET = "adilisagood$$boy";
 router.post(
   "/createuser",
   /* A middleware function that is used to validate the user input. */
@@ -45,7 +46,7 @@ router.post(
       /* Generating a token for the user. */
       const authtoken = jwt.sign(data, JWT_SECRET);
       /* Sending the user object to the client. */
-      res.json({authToken:authtoken});
+      res.json({ authToken: authtoken });
     } catch (err) {
       console.log(err);
       res.status(500).send("some error occured");
@@ -53,4 +54,62 @@ router.post(
   }
 );
 
+/* This is a route handler that is used to login the user. */
+router.post(
+  "/login",
+  [
+    body("email", "inter a valid email").isEmail(),
+    body("password", "password can't be blank").exists(),
+  ],
+  async (req, res) => {
+    // If there are errors, return Bad request and the errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    /* Destructuring the email and password from the request body. */
+    const { email, password } = req.body;
+    try {
+      /* This is checking if the user exists in the database. */
+      let user = await User.findOne({ email });
+      if (!user) {
+        return res
+          .status(400)
+          .json({ error: "Please try to login with correct credentials" });
+      }
+
+      /* Comparing the password that the user entered with the password that is stored in the database. */
+      let passwordCompair = await bcrypt.compare(password, user.password);
+      if (!passwordCompair) {
+        return res
+          .status(400)
+          .json({ error: "Please try to login with correct credentials" });
+      }
+
+      let data = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      let authtoken = jwt.sign(data, JWT_SECRET);
+      res.json({ authtoken: authtoken });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
+
+router.get("/fetchuserdata", fetchuser, async (req, res) => {
+  try {
+    userid = req.user.id;
+    let user = await User.findById(userid).select("-password");
+    res.send(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
 module.exports = router;
