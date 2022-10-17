@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link,useLocation } from 'react-router-dom'
 const Navbar = () => {
+/* A hook that returns the current location. */
   let location = useLocation();
   return (
     <nav className="navbar navbar-dark navbar-expand-lg sticky-top" style={{background:'rgb(229 131 59)'}}>

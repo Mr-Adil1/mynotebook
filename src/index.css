@@ -1,3 +1,6 @@
+*{
+  scroll-behavior: smooth;
+}
 body {
   overflow-x: hidden!important;
   margin: 0;
@@ -12,10 +15,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+/* scrollbar style */
+::-webkit-scrollbar{
+  width: 8px;
+  padding-top: 5px;
+}::-webkit-scrollbar-track{
+  background: transparent;
+}::-webkit-scrollbar-thumb{
+  background: rgb(229 131 59);
+  width: 100%;
+  border-radius: 10px;
+}
+
+
 i {
   cursor: pointer;
 }
 
+/* The CSS for the add note button. */
 .add-note {
   background: rgb(229 131 59);
   bottom: 30px;
@@ -25,19 +42,22 @@ i {
   height: 50px;
   transition: transform 0.5s ease;
 }
+/* Rotating the button by 315 degrees. */
 .toggle{
   transform: rotate(315deg);
 }
+/* Hiding the form. */
 .note-form{
   width: 0px;
   height: 0px;
-  overflow: hidden;
+  overflow-x: hidden;
   padding: 0;
   bottom: 46px;
   right: 42px;
   transform: rotate(0deg)!important;
   transition: 0.3s linear;
 }
+/* The CSS for display the form when it is toggled. */
 .note-form.toggle{
   width: 90%;
   height: 70%; 
@@ -45,6 +65,7 @@ i {
   padding: 30px;
   right: 5%;
 }
+/* Setting the background of the textarea to a transparent black. */
 .note-input{
   background: rgba(0,0,0,0.3)!important;
   resize: none;

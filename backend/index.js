@@ -1,7 +1,11 @@
 const connectDB = require("./db");
 const express = require("express");
+/* A middleware that allows cross-origin requests. */
+var cors = require('cors')
 /* Creating an instance of the express application. */
 const app = express();
+/* A middleware that allows cross-origin requests. */
+app.use(cors())
 /* Setting the port to 4000. */
 const port = 4000;
 /* A middleware that parses the body of the request and makes it available on the request object. */
