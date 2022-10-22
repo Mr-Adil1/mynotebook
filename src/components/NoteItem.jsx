@@ -5,6 +5,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 /* Importing the context from the notesContaxt.js file. */
 import NoteContext from "../context/notes/notesContaxt";
+
 const NoteItem = (props) => {
   
   /* Destructuring the props object. */
@@ -23,7 +24,6 @@ const NoteItem = (props) => {
   // }
   const context = useContext(NoteContext);
   const {deletenote} = context;
-
   // delete loading
   const [delloadingd, setdelloadingd] = useState('none');
   return (
@@ -48,7 +48,7 @@ const NoteItem = (props) => {
               <OverlayTrigger
                 overlay={<Tooltip id="tooltip">Edit Note</Tooltip>}
               >
-                <i className="fa fa-edit mx-1"></i>
+                <i className="fa fa-edit mx-1" onClick={()=>{props.updatenote(note)}}></i>
               </OverlayTrigger>
             </div>
           </div>

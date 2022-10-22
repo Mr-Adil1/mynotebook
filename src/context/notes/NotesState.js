@@ -3,22 +3,31 @@ import NoteContext from "./notesContaxt";
 
 const NotesState = (props) => {
   const host = "http://localhost:4000";
+  const [notes, setNotes] = useState("");
 
+try {
   const fetchallnotes = async () => {
-
+    
     let response = await fetch(`${host}/api/notes/fetchnotes`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjM0MGY2NWM3NGZiN2U1M2M5ZTJkNzBhIn0sImlhdCI6MTY2NTk4OTEyOX0.xprLb3xShBEHe3aF6o3rOxjvyFumtPp2jAqgyQmaYzc",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjM0MGY2NWM3NGZiN2U1M2M5ZTJkNzBhIn0sImlhdCI6MTY2NTk4OTEyOX0.xprLb3xShBEHe3aF6o3rOxjvyFumtPp2jAqgyQmaYzc",
       },
     });
     let data = await response.json();
     setNotes(data);
   };
-  fetchallnotes();
-  const [notes, setNotes] = useState("");
+  useEffect(() => {
+    return () => {
+      fetchallnotes();
+      // eslint-disable-next-line
+    };
+  }, [fetchallnotes])
+} catch (error) {
+  setNotes('Add notes to desplay')
+}
 
   //add notes
   const addnote = async (title, description) => {
@@ -53,7 +62,7 @@ const NotesState = (props) => {
   const editenote = async (id, title, description) => {
     //update api call
     const response = await fetch(`${host}/api/notes/updatenotes/${id}`, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "auth-token":
@@ -61,8 +70,7 @@ const NotesState = (props) => {
       },
       body: JSON.stringify({ title, description }),
     });
-    const json = response.json();
-    return response.json();
+    response.json();
     /* A for loop that is used to iterate over the notes array. */
     for (let i = 0; i < notes.length; i++) {
       const element = notes[i];
@@ -74,7 +82,7 @@ const NotesState = (props) => {
   };
   return (
     /* A React component that is used to provide the context to the children. */
-    <NoteContext.Provider value={{ notes, addnote, deletenote }}>
+    <NoteContext.Provider value={{ notes, addnote, deletenote,editenote }}>
       {/*  Rendering the children of the component. */}
       {props.children}
     </NoteContext.Provider>
